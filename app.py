@@ -13,7 +13,7 @@ def create_my_app():
     # preprocessing_pipe_uval=pickle.load(open('pipepreprocessingu_val.pkl', 'rb'))
     pipe_uval=pickle.load(open('pipe_u_val.pkl', 'rb'))
     # Load Keras model
-    keras_model = load_model('my_keras_model.keras')
+    keras_model = load_model('models/my_keras_model.keras')
     
 
 
