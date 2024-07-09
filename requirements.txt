@@ -1,0 +1,8 @@
+numpy
+pandas
+flask
+tensorflow
+scikit-learn
+keras
+waitress
+scipy

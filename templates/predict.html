@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ECBC Alternate Compliance Tool for Roof Shading</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        h1 {
+            color: #333333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .box {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .box h2 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .box p {
+            font-size: 18px;
+            color: #333333;
+            margin-bottom: 10px;
+        }
+        .box .label {
+            font-weight: bold;
+            color: #555555;
+        }
+        .box .value {
+            color: #000000;
+        }
+        .highlight {
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+        .small-text {
+            font-size: 12px;
+            color: #777777;
+        }
+
+        /* Responsive styles */
+        @media only screen and (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            .box {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ECBC Alternate Compliance Tool for Roof Shading</h1>
+        
+        <div class="box">
+            <h2>Input Parameters</h2>
+            <p><span class="label">City with Latitude:</span> <span class="value">{{ latitude }}</span></p>
+            <p><span class="label">City with Longitude:</span> <span class="value">{{ longitude }}</span></p>
+            <p><span class="label">Nearest City:</span> <span class="value">{{ city }}</span></p>
+            <p><span class="label">Climatic Zone:</span> <span class="value">{{ climaticZone }}</span></p>
+            <p><span class="label">Shade Direction:</span> <span class="value">{{ shadeDirection }}</span></p>
+            <p><span class="label">Building Orientation:</span> <span class="value">{{ buildingOrientation }}</span></p>
+            <p><span class="label">Shade Extent:</span> <span class="value">{{ shadeExtent }}</span></p>
+            <p><span class="label">Roof U-Value:</span> <span class="value">{{ roofUValue }}</span></p>
+            <p><span class="label">Height of Shade:</span> <span class="value">{{ heightOfShade }}</span></p>
+            <p><span class="label">Shading Transmittance:</span> <span class="value">{{ shadingTransmittance }}</span></p>
+          
+        </div>
+
+        <div class="box">
+            <h2>Output Results</h2>
+            {% if result %}
+            <p class="highlight">Top Floor Heating and Cooling Energy Savings:</p>
+            <p>The predicted energy savings for the top floor Heating and Cooling is: <font color="red"><b>{{ result }} %</b></font></p>
+            {% endif %}
+
+            {% if result_uval %}
+            <p class="highlight">Equivalent Roof U-Value:</p>
+            <p>The equivalent U-value for an unshaded roof that would achieve similar energy performance is <font color="red"><b>{{ result_uval }} W/m²K</b></font></p>
+            {% endif %}
+        </div>
+
+        <p class="small-text"><b>Limitations:</b><br>
+        • The tool does not account for roof shade projections beyond the building lines.<br>
+        • The predictions are appropriate only for large, 8-hour operated office buildings in India (excluding cold climates).
+        </p>
+    </div>
+</body>
+</html>

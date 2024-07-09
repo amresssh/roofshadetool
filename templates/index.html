@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ECBC Alternate Compliance Tool for Roof Shading</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+        h1 {
+            color: #333333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        p {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #333333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            font-weight: bold;
+            color: #555555;
+            margin-top: 10px;
+        }
+        .description {
+            font-size: 14px;
+            color: #777777;
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
+        select, input[type="number"], input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+        }
+        /* Responsive styles for phones */
+        @media only screen and (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+    <script>
+        function validateForm() {
+            let isValid = true;
+            const shadeExtent = document.forms["prediction-form"]["ShadeExtent"].value;
+            const shadingTransmittance = document.forms["prediction-form"]["ShadingTransmittance"].value;
+            const latitude = document.forms["prediction-form"]["Latitude"].value;
+            const longitude = document.forms["prediction-form"]["Longitude"].value;
+
+            document.getElementById("shadeExtentError").innerHTML = "";
+            document.getElementById("shadingTransmittanceError").innerHTML = "";
+            document.getElementById("latitudeError").innerHTML = "";
+            document.getElementById("longitudeError").innerHTML = "";
+
+            if (shadeExtent < 0 || shadeExtent > 1) {
+                document.getElementById("shadeExtentError").innerHTML = "Shade extent value must be between 0 and 1.";
+                isValid = false;
+            }
+
+            if (shadingTransmittance < 0 || shadingTransmittance > 1) {
+                document.getElementById("shadingTransmittanceError").innerHTML = "Shading transmittance value must be between 0 and 1.";
+                isValid = false;
+            }
+
+            if (latitude < -90 || latitude > 90) {
+                document.getElementById("latitudeError").innerHTML = "Latitude value must be between -90 and 90.";
+                isValid = false;
+            }
+
+            if (longitude < -180 || longitude > 180) {
+                document.getElementById("longitudeError").innerHTML = "Longitude value must be between -180 and 180.";
+                isValid = false;
+            }
+
+            return isValid;
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>ECBC Alternate Compliance Tool for Roof Shading</h1>
+        <p>This tool is developed to calculate the impact of roof shading on the energy performance of a building. It provides the equivalent roof U-value at which the building would perform the same in the absence of the shade. By inputting the necessary parameters related to shading and insulation, the tool predicts energy savings for the top floor and calculates the corresponding unshaded roof U-value.</p>
+        <p>To use this tool, please provide the following information:</p>
+        <form id="prediction-form" name="prediction-form" method="post" action="/predict" onsubmit="return validateForm()">
+            <label>Climatic Zone:</label>
+            <p class="description">Select the climatic zone that the city/town lies in.</p>
+            <select name="ClimaticZone">
+                <option value="Hot and Dry">Hot and Dry</option>
+                <option value="Composite">Composite</option>
+                <option value="Temperate">Temperate</option>
+                <option value="Warm and Humid">Warm and Humid</option>
+            </select>
+
+            <label>Shade Direction:</label>
+            <p class="description">Direction of shade on roof.</p>
+            <select name="ShadeDirection">
+                <option value="East">East</option>
+                <option value="West">West</option>
+                <option value="North">North</option>
+                <option value="South">South</option>
+            </select>
+
+            <label>Building Orientation:</label>
+            <p class="description">Specify the building's orientation: 0° (Longer axis aligned with North-South) or 90° (Longer axis aligned with East-West).</p>
+            <select name="BuildingOrientation">
+                <option value="0">0</option>
+                <option value="90">90</option>
+            </select>
+
+            <label>Latitude (Deg North):</label>
+            <p class="description">Provide Latitude in Decimals, Example: 26.92.</p>
+            <input type="number" name="Latitude" step="0.0001">
+            <span id="latitudeError" class="error-message"></span>
+
+            <label>Longitude (Deg East):</label>
+            <p class="description">Provide Longitude in Decimals, Example: 75.78.</p>
+            <input type="number" name="Longitude" step="0.0001">
+            <span id="longitudeError" class="error-message"></span>
+
+            <label>Shade Extent:</label>
+            <p class="description">Amount of roof shaded (as a factor, values ranging from 0 to 1): 0 for no shade, 1 for full shade.</p>
+            <input type="number" name="ShadeExtent" step="0.01">
+            <span id="shadeExtentError" class="error-message"></span>
+
+            <label>Roof U-Value (W/m²K):</label>
+            <p class="description">U-Value (W/m²K) of the proposed roof (Ranging between 0.2 W/m²K and 4 W/m²K).</p>
+            <input type="number" name="RoofUValue" step="0.01">
+
+            <label>Height of Shade (m):</label>
+            <p class="description">Provide the height in meters at which the shade is positioned relative to the roof.</p>
+            <input type="number" name="HeightofShade">
+
+            <label>Shading Transmittance:</label>
+            <p class="description">The solar transmittance of the shading, expressed as a decimal (ranging from 0 - 1): A value of '0' indicates opaque shades that block all solar radiation, while '1' indicates fully transparent shades that allow all solar radiation to pass through.</p>
+            <input type="number" name="ShadingTransmittance" step="0.01">
+            <span id="shadingTransmittanceError" class="error-message"></span>
+
+            <input type="submit" value="Predict">
+        </form>
+        {% if result %}
+        <p>The predicted Top Floor cooling and Heating Load savings: {{ result }} %</p>
+        {% endif %}
+    </div>
+</body>
+</html>
