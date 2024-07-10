@@ -83,15 +83,17 @@ def create_my_app():
                 df = pd.DataFrame(data)
                 same_zone_cities = df[df['Climatic Zone'] == climaticZone]
                 
-                # Calculate Euclidean distances
-                same_zone_cities['Distance'] = same_zone_cities.apply(lambda row: distance.euclidean((value1, value2), (row['Latitude'], row['Longitude'])), axis=1)
+                def euclidean_distance(lat1, lon1, lat2, lon2):
+                    return ((lat1 - lat2)**2 + (lon1 - lon2)**2) ** 0.5
+                
+                same_zone_cities['Distance'] = same_zone_cities.apply(lambda row: euclidean_distance(value1, value2, row['Latitude'], row['Longitude']), axis=1)
                 
                 # Find the nearest city
                 nearest_city_info = same_zone_cities.sort_values(by='Distance').iloc[0]
                 
                 return nearest_city_info['Latitude'], nearest_city_info['Longitude'], nearest_city_info['City']
-            latitude,longitude,city = combined_nearest_values(climaticZone,latitude,longitude)
-        
+
+            latitude, longitude, city = combined_nearest_values(climaticZone, latitude, longitude)
 
             # Preprocess input data
             input_data = np.array([climaticZone, shadeDirection,  buildingOrientation, latitude, longitude, shadeExtent, roofUValue, heightOfShade,
@@ -141,9 +143,9 @@ def create_my_app():
                 city=city,
             )
     return app
-# if __name__ == '__main__':
-#     from waitress import serve
+if __name__ == '__main__':
+    from waitress import serve
 
-#     app = create_my_app()
-#     serve(app, host="127.0.0.1", port=8080)
+    app = create_my_app()
+    serve(app, host="127.0.0.1", port=8080)
     
