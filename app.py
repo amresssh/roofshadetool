@@ -141,9 +141,9 @@ def create_my_app():
                 city=city,
             )
     return app
-if __name__ == '__main__':
-    from waitress import serve
+# if __name__ == '__main__':
+#     from waitress import serve
 
-    app = create_my_app()
-    serve(app, host="127.0.0.1", port=8080)
+#     app = create_my_app()
+#     serve(app, host="127.0.0.1", port=8080)
     
