@@ -5,7 +5,7 @@ from keras.models import load_model
 import pickle
 from scipy.spatial import distance
 import tensorflow as tf
-def create_my_app():
+def app():
     app = Flask(__name__)
 
     # Load preprocessed pipeline
@@ -146,6 +146,6 @@ def create_my_app():
 if __name__ == '__main__':
     from waitress import serve
 
-    app = create_my_app()
+    app = app()
     serve(app, host="127.0.0.1", port=8080)
     
